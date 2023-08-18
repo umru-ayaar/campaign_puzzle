@@ -23,83 +23,22 @@ public class Main {
     }
 
     static void findAndSetRank() {
+
         for (CampaignInput campaignInput : campaignInputList) {
             double rankValue = calculateRankValue(campaignInput.getRank().getAvg());
             campaignInput.getRank().setRankValue(rankValue);
         }
 
-        campaignInputList.sort(Comparator.comparingDouble(o -> o.getRank().getRankValue()));
-
-        HashMap<Double,Integer> duplicateRankMap=new HashMap<>();
-
-        for (CampaignInput input : campaignInputList) {
-            double key = input.getRank().getRankValue();
-
-            if (duplicateRankMap.size() != 0) {
-                if (duplicateRankMap.containsKey(key)) {
-                    Integer prevValue = duplicateRankMap.get(key);
-                    duplicateRankMap.replace(key, prevValue + 1);
+        campaignInputList.sort(new Comparator<CampaignInput>() {
+            @Override
+            public int compare(CampaignInput o1, CampaignInput o2) {
+                if (o1.getRank().getRankValue() != o2.getRank().getRankValue()) {
+                    return Integer.compare((int) o1.getRank().getRankValue(), (int) o2.getRank().getRankValue());
                 } else {
-                    duplicateRankMap.put(input.getRank().getRankValue(), 1);
-                }
-            } else {
-                duplicateRankMap.put(input.getRank().getRankValue(), 1);
-            }
-
-        }
-
-        duplicateRankMap.entrySet().removeIf(entry -> entry.getValue() == 1.0);
-
-
-        HashMap<Double,ArrayList<CampaignInput>> campaignInputSortMap=new HashMap<>();
-
-        for (Map.Entry<Double, Integer> entry : duplicateRankMap.entrySet()) {
-
-            for (CampaignInput campaignInput : campaignInputList) {
-                if (campaignInput.getRank().getRankValue() == entry.getKey()) {
-                    ArrayList<CampaignInput> campaignInputs = new ArrayList<>();
-                    if (campaignInputSortMap.containsKey(entry.getKey())) {
-                        campaignInputs = campaignInputSortMap.get(entry.getKey());
-
-                    }
-                    campaignInputs.add(campaignInput);
-                    campaignInputSortMap.put(entry.getKey(), campaignInputs);
+                    return Integer.compare((int) o1.getImpressionPerCampaign(), (int) o2.getImpressionPerCampaign());
                 }
             }
-        }
-
-        for (Map.Entry<Double, ArrayList<CampaignInput>> entry : campaignInputSortMap.entrySet()) {
-
-            ArrayList<CampaignInput> sortedList = new ArrayList<>();
-            for (Map.Entry<Double, ArrayList<CampaignInput>> entry1 : campaignInputSortMap.entrySet()) {
-                ArrayList<CampaignInput> campaignInputs = entry1.getValue();
-                campaignInputs.sort(Comparator.comparingDouble(CampaignInput::getImpressionPerCampaign));
-
-
-                sortedList.addAll(campaignInputs);
-            }
-
-
-            campaignInputSortMap.replace(entry.getKey(),sortedList);
-        }
-
-        for (Map.Entry<Double, ArrayList<CampaignInput>> entry3 : campaignInputSortMap.entrySet()) {
-            for (int i = 0; i < campaignInputList.size(); i++) {
-                if(campaignInputList.get(i).getRank().getRankValue()==entry3.getKey()){
-                    int limit=i+entry3.getValue().size();
-                    int mapIndex=0;
-                    for (int j = i; j < limit; j++) {
-
-                        campaignInputList.set(j,entry3.getValue().get(mapIndex));
-                        mapIndex++;
-
-                    }
-
-                    break;
-                }
-            }
-        }
-
+        });
 
             for (int k = 0; k < campaignInputList.size(); k++) {
                 int tempVal=k+1;
