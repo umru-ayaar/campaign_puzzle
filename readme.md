@@ -15,21 +15,6 @@ Follow these steps to set up and run the Campaign Puzzle project using IntelliJ 
 
 
 
-Follow these steps to set up and run the Campaign Puzzle project using IntelliJ IDEA.
-
-## Prerequisites
-
-- [IntelliJ IDEA](https://www.jetbrains.com/idea/) installed on your system.
-
-## Installation
-
-1. Clone the repository to your local machine using:
-
-   ```bash
-   git clone https://github.com/umru-ayaar/campaign_puzzle.git
-
-
-
 2. Open IntelliJ IDEA.
 
 3. Click on File -> Open and navigate to the cloned campaign_puzzle directory. Select the directory and click Open.
